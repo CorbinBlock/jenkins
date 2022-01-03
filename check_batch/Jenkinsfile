@@ -1,0 +1,14 @@
+pipeline {
+    agent { label 'windows-agent-02-work' }
+
+    stages {
+        stage('hello') {
+            steps {
+                script {
+                pwsh.exe -c "sqlcmd -S $env:a_server_01 -i $env:a_daily_batch_script; 
+                sqlcmd -S $env:a_server_02 -i $env:a_daily_batch_script"
+                }
+            }
+        }
+    }
+}
