@@ -5,8 +5,8 @@ pipeline {
         stage('hello') {
             steps {
                 script {
-                sh "cat /etc/os-release"
-                sh "dnf upgrade"
+                sh "cat /etc/os-release
+                    dnf upgrade"
                 sh "yum upgrade"
                 }
             }
