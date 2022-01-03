@@ -7,8 +7,8 @@ pipeline {
                 script {
                 sh """cat /etc/os-release
                     dnf upgrade
+                    yum upgrade
                 """
-                sh "yum upgrade"
                 }
             }
         }
