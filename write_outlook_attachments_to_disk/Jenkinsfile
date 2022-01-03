@@ -5,7 +5,7 @@ pipeline {
         stage('hello') {
             steps {
                 script {
-                pwsh.exe -c "ls"
+                pwsh.exe "ls"
                 }
             }
         }
