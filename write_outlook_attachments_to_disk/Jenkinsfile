@@ -5,7 +5,7 @@ pipeline {
         stage('hello') {
             steps {
                 script {
-                powershell "ls"
+                pwsh.exe -c "ls"
                 }
             }
         }
