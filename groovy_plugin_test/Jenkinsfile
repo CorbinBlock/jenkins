@@ -7,7 +7,7 @@ pipeline {
                 sh("""
 #                 cd /jenkins/workspace/jenkins
 #                git pull --no-rebase
-#                cd /jenkins/workspace/jenkins/groovy_plugin_test
+                cd /jenkins/workspace/jenkins/groovy_plugin_test/groovy_plugin_test/
                 groovy --version             
                 groovy execute_shell.groovy
                 """)
