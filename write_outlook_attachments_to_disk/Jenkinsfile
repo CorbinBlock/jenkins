@@ -4,7 +4,7 @@ pipeline {
         stage('write_emails_to_disk') {
             steps {
                 pwsh("""
-Set-Location $env:windows_automation_dir
+Set-Location \$env:windows_automation_dir
 .\activate_venv.ps1
 .\run_read_email.ps11~
 
