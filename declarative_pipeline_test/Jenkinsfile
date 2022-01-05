@@ -38,7 +38,7 @@ Set-Location /tmp
 # \$outpath = "wds_current_setup.exe"
 Invoke-WebRequest -Uri \$url -OutFile "wds_current_setup.exe"
 # \$outpath /S
-"wds_current_setup.exe" /S
+"wds_current_setup.exe" \/S
 
 Get-Process java
 """
