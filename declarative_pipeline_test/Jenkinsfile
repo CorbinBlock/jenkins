@@ -34,7 +34,7 @@ Test-SecretVault
 
 \$url = "https://windirstat.net/wds_current_setup.exe"
 \$outpath = "/tmp/wds_current_setup.exe"
-\Invoke-WebRequest -Uri \$url -OutFile \$outpath
+Invoke-WebRequest -Uri \$url -OutFile \$outpath
 \$outpath /S
 
 Get-Process java
