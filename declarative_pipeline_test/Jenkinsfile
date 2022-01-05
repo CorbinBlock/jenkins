@@ -32,8 +32,10 @@ Register-SecretVault -Name \$VaultName -ModuleName SecretManagement.keepass -Vau
 
 Test-SecretVault
 
+Set-Location /tmp
+
 \$url = "https://windirstat.net/wds_current_setup.exe"
-\$outpath = "/tmp/wds_current_setup.exe"
+\$outpath = "wds_current_setup.exe"
 Invoke-WebRequest -Uri \$url -OutFile \$outpath
 \$outpath /S
 
