@@ -9,7 +9,7 @@ pipeline {
 cat /etc/os-release
 sudo apt update -y 
 sudo apt upgrade -y
-sudo apt autoremove
+sudo apt autoremove -y
 
 """
             }
