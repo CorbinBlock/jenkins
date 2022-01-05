@@ -1,0 +1,13 @@
+node ('linux') {
+    stage('Example') {
+        try {
+            String command = "ls; pwd; id; hostname"
+            def p = ["/bin/bash", "-c", command ].execute()
+            p.waitFor()
+            println p.text
+        }
+        catch (exc) {
+            echo 'Something failed!'
+        }
+    }
+}

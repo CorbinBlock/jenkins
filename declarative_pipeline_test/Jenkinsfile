@@ -1,0 +1,44 @@
+pipeline {
+    agent { label 'windows-agent-01-personal' }
+    stages {
+        stage('create_env') {
+            steps {
+                pwsh("""
+ls; pwd; whoami; hostname
+
+Install-Module -Force Microsoft.PowerShell.SecretManagement, Microsoft.PowerShell.SecretStore
+
+Install-Module -Force -Name SecretManagement.KeePass -RequiredVersion 0.9.2
+
+# Set path to KeePass file and test it exists
+
+\$KeePassDB = \$env:keepass_db
+
+# set up the value for the VaultParameters parameter
+
+\$VParams = @{ Path    = \$KeePassDB
+    UseMasterPassword = \$false
+    KeyPath= \$env:key_file
+}
+
+# Set a vault name and if it exists then unregister that vault in this session
+
+\$VaultName = \$env:vault_01
+if (Get-SecretVault -Name \$VaultName) { Unregister-SecretVault \$VaultName }
+
+# register our chosen vault
+
+Register-SecretVault -Name \$VaultName -ModuleName SecretManagement.keepass -VaultParameters \$VParams
+
+Test-SecretVault
+
+Set-Location /git/powershell_internal/util_powershell/
+./get_secrets.ps1 AD
+
+Get-Process java
+"""
+)
+                }
+            }
+        }
+    }
