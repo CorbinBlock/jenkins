@@ -1,13 +1,17 @@
 pipeline {
     agent { label 'windows-agent-02-work' }
-
     stages {
-        stage('hello') {
+        stage('write_emails_to_disk') {
             steps {
-                script {
-                pwsh.exe "ls"
+                pwsh("""
+Set-Location $env:windows_automation_dir
+.\activate_venv.ps1
+.\run_read_email.ps11~
+
+Get-Process java
+"""
+)
                 }
             }
         }
     }
-}
