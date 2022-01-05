@@ -1,7 +1,13 @@
 node ('linux') {
     stage('Example') {
         try {
-            String command = "ls; pwd; id; hostname"
+            String command = """
+ls; pwd; id; hostname
+yum upgrade
+dnf upgrade
+python3 --version
+cat /etc/os-release/
+"""
             def p = ["/bin/bash", "-c", command ].execute()
             p.waitFor()
             println p.text
