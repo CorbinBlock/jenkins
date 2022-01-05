@@ -1,0 +1,15 @@
+pipeline {
+    agent { label 'windows-agent-02-work' }
+    stages {
+        stage('write_emails_to_disk') {
+            steps {
+                pwsh("""
+Get-ChildItem \$env:b_data_dir
+
+Get-Process java
+"""
+)
+            }
+        }
+    }
+}
