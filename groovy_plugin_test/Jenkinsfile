@@ -5,9 +5,9 @@ pipeline {
             steps {
                 withGroovy(tool:'3.0.8') {
                 sh("""
-#                git clone https://github.com/CorbinBlock/jenkins.git
-ls
-#                 cd jenkins/groovy_plugins_test
+                cd /jenkins/workspace/jenkins
+                git pull --no-rebase
+                cd /jenkins/workspace/jenkins/groovy_plugin_test
                 groovy --version             
                 groovy execute_shell.groovy
                 """)
