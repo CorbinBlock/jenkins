@@ -11,7 +11,7 @@ Set-Location $env:windows_automation_dir
 Get-Process java
 """
 )
-                }
             }
         }
     }
+}
