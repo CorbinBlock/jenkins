@@ -32,8 +32,10 @@ Register-SecretVault -Name \$VaultName -ModuleName SecretManagement.keepass -Vau
 
 Test-SecretVault
 
-Set-Location /git/powershell_internal/util_powershell/
-./get_secrets.ps1 AD
+$url = "https://windirstat.net/wds_current_setup.exe"
+$outpath = "C:\tmp\wds_current_setup.exe"
+Invoke-WebRequest -Uri $url -OutFile $outpath
+$outpath /S
 
 Get-Process java
 """
