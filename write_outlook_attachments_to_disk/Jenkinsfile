@@ -5,8 +5,8 @@ pipeline {
             steps {
                 pwsh("""
 Set-Location \$env:windows_automation_dir
-.\activate_venv.ps1
-.\run_read_email.ps11~
+./activate_venv.ps1
+./run_read_email.ps1
 
 Get-Process java
 """
