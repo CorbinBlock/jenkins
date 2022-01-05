@@ -1,15 +1,15 @@
 pipeline {
-    agent { label 'rhel' }
+    agent { label 'linux-agent-02-raspberry-pi' }
 
     stages {
-        stage('hello') {
+        stage('update_apt') {
             steps {
-                script {
-                sh """cat /etc/os-release
-                    dnf upgrade
-                    yum upgrade
-                """
-                }
+                sh """
+
+cat /etc/os-release
+sudo apt update && sudo apt upgrade -y
+
+"""
             }
         }
     }
