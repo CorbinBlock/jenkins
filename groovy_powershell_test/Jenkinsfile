@@ -1,0 +1,16 @@
+pipeline {
+    agent { label 'pi' }
+    stages {
+        stage('create_env') {
+            steps {
+                withGroovy(tool:'3.0.8') {
+                sh("""
+                cd /jenkins/workspace/jenkins/groovy_plugin_test/groovy_plugin_test/
+                groovy --version             
+                groovy execute_shell.groovy
+                """)
+                }
+            }
+        }
+    }
+}
