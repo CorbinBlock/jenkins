@@ -3,7 +3,7 @@ String shell_name = "/bin/bash"
 String option_name = "-c"
 
 String shell_command ="""
-python --version
+python3 --version
 java --version
 groovy --version
 
