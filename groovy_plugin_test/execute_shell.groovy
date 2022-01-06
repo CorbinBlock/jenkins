@@ -10,7 +10,7 @@ groovy --version
 """
 
 String shell_script ="""
-${shell_name}${option_name} ${shell_command}
+${shell_name} ${option_name} ${shell_command}
 """
 
 shell_script.execute().text
