@@ -1,0 +1,264 @@
+pipeline {
+    agent none
+    stages {
+        stage('build_home_laptop') {
+            agent { 
+                label 'windows-agent-01-personal'
+            }
+            steps {
+                pwsh("""
+                # dbeaver - must install manually to accept prompt
+                # winget install 9PNKDR50694P -h #dbeaver
+                
+                # winget install AdoptOpenJDK.OpenJDK.11 -h
+                # winget install Apple.iTunes -h
+                # winget install Adobe.Acrobat.Reader.64-bit -h
+                # winget install Amazon.AWSCLI -h
+                # winget install Cockos.Reaper -h
+                # winget install Docker.DockerDesktop -h
+                # winget install DominikReichl.KeePass -h
+                # winget install Fedora.FedoraMediaWriter -h
+                # winget install Git.Git -h
+                # winget install Google.Chrome -h
+                # winget uninstall 'Azure Data Studio' -h
+                # winget install Microsoft.SQLServerManagementStudio -h
+                # winget install Microsoft.VisualStudioCode -h
+                # winget install Notepad++.Notepad++ -h
+                # winget install Python.Python.3 -h
+                # winget install RaspberryPiFoundation.RaspberryPiImager -h
+                # winget install TheGroovyTeam.Groovy -h
+                # winget install Valve.Steam -h
+                # winget install WinDirStat -h
+
+                Get-NetIPAddress | Format-Table
+
+                # Install-Module -Force Microsoft.PowerShell.SecretManagement
+                # Install-Module -Force Microsoft.PowerShell.SecretStore
+                # Install-Module -Force -Name SecretManagement.KeePass -RequiredVersion 0.9.2
+            
+                New-Item -ItemType Directory -Force -Path /git/docker
+                New-Item -ItemType Directory -Force -Path /git/powershell
+                New-Item -ItemType Directory -Force -Path /git/python
+                
+                cd /git
+                
+                git clone https://github.com/CorbinBlock/docker
+                git clone https://github.com/CorbinBlock/powershell
+                git clone https://github.com/CorbinBlock/python
+    
+                bash -c "cd docker; git init; git pull --no-rebase; cd .."
+                bash -c "cd powershell; git init; git pull --no-rebase; cd .."
+                bash -c "cd python; git init; git pull --no-rebase; cd .."
+                
+                docker container rm debian_dev_env -f
+                # docker builder prune -a -f
+                cd docker/debian_dev_env
+                ./build_debian_container.ps1; ./run_container.ps1
+                docker start debian_dev_env
+                ./export_docker_import_wsl.ps1
+                docker volume prune -f
+                docker volume ls
+                docker container ls
+                docker images ls
+
+                """)
+            }
+        }
+        stage('build_work_laptop') {
+            agent { 
+                label 'windows-agent-02-work'
+            }
+            steps {
+                pwsh("""
+                # dbeaver - must install manually to accept prompt
+                # winget install 9PNKDR50694P -h #dbeaver
+                
+                # winget install AdoptOpenJDK.OpenJDK.11 -h
+                # winget install Apple.iTunes -h
+                # winget install Adobe.Acrobat.Reader.64-bit -h
+                # winget install Amazon.AWSCLI -h
+                # winget install Cockos.Reaper -h
+                # winget install Docker.DockerDesktop -h
+                # winget install DominikReichl.KeePass -h
+                # winget install Fedora.FedoraMediaWriter -h
+                # winget install Git.Git -h
+                # winget install Google.Chrome -h
+                # winget uninstall 'Azure Data Studio' -h
+                # winget install Microsoft.SQLServerManagementStudio -h
+                # winget install Microsoft.VisualStudioCode -h
+                # winget install Notepad++.Notepad++ -h
+                # winget install Python.Python.3 -h
+                # winget install RaspberryPiFoundation.RaspberryPiImager -h
+                # winget install TheGroovyTeam.Groovy -h
+                # winget install Valve.Steam -h
+                # winget install WinDirStat -h
+
+                Get-NetIPAddress | Format-Table
+
+                # Install-Module -Force Microsoft.PowerShell.SecretManagement
+                # Install-Module -Force Microsoft.PowerShell.SecretStore
+                # Install-Module -Force -Name SecretManagement.KeePass -RequiredVersion 0.9.2
+            
+                New-Item -ItemType Directory -Force -Path /git/docker
+                New-Item -ItemType Directory -Force -Path /git/powershell
+                New-Item -ItemType Directory -Force -Path /git/python
+                
+                cd /git
+                
+                git clone https://github.com/CorbinBlock/docker
+                git clone https://github.com/CorbinBlock/powershell
+                git clone https://github.com/CorbinBlock/python
+    
+                bash -c "cd docker; git init; git pull --no-rebase; cd .."
+                bash -c "cd powershell; git init; git pull --no-rebase; cd .."
+                bash -c "cd python; git init; git pull --no-rebase; cd .."
+                
+                docker container rm debian_dev_env -f
+                # docker builder prune -a -f
+                cd docker/debian_dev_env
+                ./build_debian_container.ps1; ./run_container.ps1
+                docker start debian_dev_env
+                ./export_docker_import_wsl.ps1
+                # docker volume prune -f
+                docker volume ls
+                docker container ls
+                docker images ls
+
+                """)
+            }
+        }
+        stage('update_debian_server') {
+            agent { 
+                label 'linux-agent-01-pi'
+            }
+            steps {
+                sh"""
+                ls -ltr;id;hostname
+                # apt-get update -y && apt-get upgrade -y
+                # apt-get install sudo
+                # apt-get install vim -y
+                # apt-get install openjdk-11-jdk -y
+                # passwd
+                # useradd -m -s /bin/bash cblock
+                # passwd cblock
+                # mkdir /jenkins
+                # chown -R cblock /jenkins
+                
+                
+                
+                # sudo echo 'export GIT_USERNAME=<username>' >> /etc/profile.d/git_username.sh
+                # sudo echo 'export GIT_EMAIL=<email>' >> /etc/profile.d/git_email.sh
+                
+                # sudo apt-get update && sudo apt-get upgrade -y
+                # sudo apt-get install git -y
+                # git --version
+                # git config --global user.name \$GIT_USERNAME
+                # git config --global user.name
+                # git config --global user.email \$GIT_EMAIL
+                # git config --global user.email
+                # sudo apt-get install python3 python3-pip python3-venv -y
+                # python3 --version
+                # sudo apt-get remove docker docker-engine docker.io containerd runc
+                # sudo apt-get update
+                # sudo apt-get install \
+                #    ca-certificates \
+                #    curl \
+                #    gnupg \
+                #    lsb-release
+                # curl -fsSL https://download.docker.com/linux/debian/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+                # echo "deb [arch=\$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/debian \$(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+                # sudo apt-get update
+                # sudo apt-get install docker-ce docker-ce-cli containerd.io
+                # sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-\$(uname -s)-\$(uname -m)" -o /usr/local/bin/docker-compose
+                # sudo chmod +x /usr/local/bin/docker-compose
+                # docker-compose --version
+                
+                # vim /etc/ssh/sshd_config
+                # Edit line to the following: PermitRootLogin yes
+                
+                # Restart SSH server
+                # /etc/init.d/ssh restart 
+                
+                mkdir -p /git
+                cd /git
+                git clone https://github.com/CorbinBlock/bash.git
+                git clone https://github.com/CorbinBlock/docker.git
+                git clone https://github.com/CorbinBlock/jenkins.git
+                git clone https://github.com/CorbinBlock/python.git
+                cd bash; git init; git pull --no-rebase; cd -
+                cd docker; git init; git pull --no-rebase; cd -
+                cd jenkins; git init; git pull --no-rebase; cd -
+                cd python; git init; git pull --no-rebase; cd -
+                
+                """
+            }
+        }
+         stage('update_fedora_server') {
+            agent { 
+                label 'linux-agent-02-fedora'
+            }
+            steps {
+                sh"""
+                cat /etc/os-release
+                cd ~
+                pwd
+                ls
+                id
+                dnf update -y
+                yum update -y
+            
+                # systemctl enable --now cockpit.socket
+
+                # dnf install git -y
+                git --version
+                python --version 
+                
+                # echo "export GIT_EMAIL='williamcorbinblock@gmail.com'" > /etc/profile.d/git_email.sh
+                # echo "export GIT_USERNAME='CorbinBlock'" > /etc/profile.d/git_username.sh
+
+                # git config --global user.name \$GIT_USERNAME
+                # git config --global user.name
+                # git config --global user.email \$GIT_EMAIL
+                # git config --global user.email
+
+                # dnf install vim -y
+                vim --version    
+                # dnf remove buildah skopeo podman containers-common atomic-registries docker container-tools -y
+                # rm -rf /etc/containers/* /var/lib/containers/* /etc/docker /etc/subuid* /etc/subgid*
+                # cd ~ && rm -rf /.local/share/containers/
+
+                # dnf remove podman.x86_64 -y
+                # dnf autoremove -y
+                
+                # dnf -y install dnf-plugins-core -y
+
+                # dnf config-manager --add-repo=https://download.docker.com/linux/fedora/docker-ce.repo
+                # dnf repolist -v
+                # dnf install docker-ce docker-ce-cli containerd.io -y 
+                # systemctl enable --now docker
+                # systemctl is-active docker
+
+                # curl -L "https://github.com/docker/compose/releases/download/1.23.2/docker-compose-\$(uname -s)-\$(uname -m)" -o docker-compose
+                # mv docker-compose /usr/local/bin && chmod +x /usr/local/bin/docker-compose
+                # ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
+
+                # dnf group install "Development Tools" -y
+                
+                dnf history userinstalled
+                
+                mkdir -p /git
+                cd /git
+                git clone https://github.com/CorbinBlock/bash.git
+                git clone https://github.com/CorbinBlock/docker.git
+                git clone https://github.com/CorbinBlock/jenkins.git
+                git clone https://github.com/CorbinBlock/python.git
+                cd bash; git init; git pull --no-rebase; cd -
+                cd docker; git init; git pull --no-rebase; cd -
+                cd jenkins; git init; git pull --no-rebase; cd -
+                cd python; git init; git pull --no-rebase; cd -
+                
+                """
+            }
+        }
+    }
+}
