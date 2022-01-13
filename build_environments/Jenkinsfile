@@ -51,7 +51,7 @@ pipeline {
                 bash -c "cd python; git init; git pull --no-rebase; cd .."
                 
                 docker container rm debian_dev_env -f
-                # docker builder prune -a -f
+                docker builder prune -a -f
                 cd docker/debian_dev_env
                 ./build_debian_container.ps1; ./run_container.ps1
                 docker start debian_dev_env
