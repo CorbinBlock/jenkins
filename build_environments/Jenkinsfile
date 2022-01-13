@@ -118,14 +118,12 @@ pipeline {
                 
                 mkdir -p /git
                 cd /git
-                git clone https://github.com/CorbinBlock/bash.git
-                git clone https://github.com/CorbinBlock/docker.git
-                git clone https://github.com/CorbinBlock/jenkins.git
-                git clone https://github.com/CorbinBlock/python.git
-                cd bash; git init; git pull --no-rebase; cd -
-                cd docker; git init; git pull --no-rebase; cd -
-                cd jenkins; git init; git pull --no-rebase; cd -
-                cd python; git init; git pull --no-rebase; cd -
+
+                git clone https://github.com/CorbinBlock/bash.git || (cd /git/bash ; git pull --no-rebase)
+                git clone https://github.com/CorbinBlock/docker.git || (cd /git/docker ; git pull --no-rebase)
+                git clone https://github.com/CorbinBlock/jenkins.git || (cd /git/jenkins ; git pull --no-rebase)
+                git clone https://github.com/CorbinBlock/python.git || (cd /git/python ; git pull --no-rebase)
+
                 
                 """
             }
@@ -185,15 +183,12 @@ pipeline {
                 
                 mkdir -p /git
                 cd /git
-                git clone https://github.com/CorbinBlock/bash.git
-                git clone https://github.com/CorbinBlock/docker.git
-                git clone https://github.com/CorbinBlock/jenkins.git
-                git clone https://github.com/CorbinBlock/python.git
-                cd bash; git init; git pull --no-rebase; cd -
-                cd docker; git init; git pull --no-rebase; cd -
-                cd jenkins; git init; git pull --no-rebase; cd -
-                cd python; git init; git pull --no-rebase; cd -
-                
+               
+                git clone https://github.com/CorbinBlock/bash.git || (cd /git/bash ; git pull --no-rebase)
+                git clone https://github.com/CorbinBlock/docker.git || (cd /git/docker ; git pull --no-rebase)
+                git clone https://github.com/CorbinBlock/jenkins.git || (cd /git/jenkins ; git pull --no-rebase)
+                git clone https://github.com/CorbinBlock/python.git || (cd /git/python ; git pull --no-rebase)
+
                 """
             }
         }
