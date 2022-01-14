@@ -4,7 +4,7 @@ pipeline {
         }
         stage('build_work_laptop') {
             agent { 
-                label 'windows-agent-02-work'
+                label 'windows-02-work'
             }
             steps {
                 pwsh("""

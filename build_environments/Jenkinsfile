@@ -3,7 +3,7 @@ pipeline {
     stages {
         stage('build_home_laptop') {
             agent { 
-                label 'windows-agent-01-personal'
+                label 'windows-01-home'
             }
             steps {
                 pwsh("""
@@ -66,7 +66,7 @@ pipeline {
         }
         stage('update_debian_server') {
             agent { 
-                label 'linux-agent-01-pi'
+                label 'linux-02-debian'
             }
             steps {
                 sh"""
@@ -130,7 +130,7 @@ pipeline {
         }
          stage('update_fedora_server') {
             agent { 
-                label 'linux-agent-02-fedora'
+                label 'linux-01-fedora'
             }
             steps {
                 sh"""
