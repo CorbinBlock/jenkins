@@ -50,16 +50,18 @@ pipeline {
                 bash -c "cd powershell; git init; git pull --no-rebase; cd .."
                 bash -c "cd python; git init; git pull --no-rebase; cd .."
                 
-                docker container rm debian_dev_env -f
-                docker builder prune -a -f
-                cd docker/debian_dev_env
-                ./build_debian_container.ps1; ./run_container.ps1
-                docker start debian_dev_env
-                ./export_docker_import_wsl.ps1
-                docker volume prune -f
-                docker volume ls
-                docker container ls
-                docker images ls
+                Set-Location /git/powershell_internal/util_powershell
+                ./pscp_copy_image_from_linux.ps1 
+                # docker container rm debian_dev_env -f
+                # docker builder prune -a -f
+                # cd docker/debian_dev_env
+                # ./build_debian_container.ps1; ./run_container.ps1
+                # docker start debian_dev_env
+                # ./export_docker_import_wsl.ps1
+                # docker volume prune -f
+                # docker volume ls
+                # docker container ls
+                # docker images ls
 
                 """)
             }
@@ -189,8 +191,8 @@ pipeline {
                 git clone https://github.com/CorbinBlock/jenkins.git || (cd /git/jenkins ; git pull --no-rebase)
                 git clone https://github.com/CorbinBlock/python.git || (cd /git/python ; git pull --no-rebase)
 	         
-                dir( '/tmp') {
-                stash includes: 'debian_dev_env.tar.gz', name: 'debian_dev_env'}
+          #      dir( '/tmp') {
+          #      stash includes: 'debian_dev_env.tar.gz', name: 'debian_dev_env'}
 
 
                 """
