@@ -123,6 +123,10 @@ pipeline {
                 git clone https://github.com/CorbinBlock/docker.git || (cd /git/docker ; git pull --no-rebase)
                 git clone https://github.com/CorbinBlock/jenkins.git || (cd /git/jenkins ; git pull --no-rebase)
                 git clone https://github.com/CorbinBlock/python.git || (cd /git/python ; git pull --no-rebase)
+              
+                dir( '/tmp' ) {
+                stash includes: 'debian_dev_env.tar.gz', name: 'debian_dev_env'}
+
 
                 
                 """
@@ -188,6 +192,8 @@ pipeline {
                 git clone https://github.com/CorbinBlock/docker.git || (cd /git/docker ; git pull --no-rebase)
                 git clone https://github.com/CorbinBlock/jenkins.git || (cd /git/jenkins ; git pull --no-rebase)
                 git clone https://github.com/CorbinBlock/python.git || (cd /git/python ; git pull --no-rebase)
+
+                unstash 'debian_dev_env'
 
                 """
             }
