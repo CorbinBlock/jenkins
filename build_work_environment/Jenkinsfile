@@ -52,12 +52,13 @@ pipeline {
                  
                 pscp.exe -pw \$env:FEDORA root@devenvrhel.ddns.net:/tmp/debian_dev_env.tar.gz /tmp/
                 
+                # TODO - replace with podman
                 cd /tmp
-                docker container rm debian_dev_env -f
-                docker builder prune -a -f
-                docker system prune --all --force --volumes
-                docker load --input debian_dev_env.tar.gz
-                docker run -d -p 5000:5000 -t --name debian_dev_env debian_dev_env
+                # docker container rm debian_dev_env -f
+                # docker builder prune -a -f
+                # docker system prune --all --force --volumes
+                # docker load --input debian_dev_env.tar.gz
+                # docker run -d -p 5000:5000 -t --name debian_dev_env debian_dev_env
                 
                 wsl --list
                 wsl --unregister debian_dev_env
