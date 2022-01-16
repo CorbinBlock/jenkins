@@ -133,8 +133,9 @@ pipeline {
                 
                 cd /git/powershell_internal/util_powershell
                 
-                pscp.exe -pw \$env:FEDORA root@devenvrhel.ddns.net:/tmp/debian_dev_env.tar.gz /tmp/
-            #    pscp.exe -pw \$env:DEBIAN -P 2222 /tmp/debian_dev_env.tar.gz root@devenvrhel.ddns.net:/tmp/
+                pscp.exe -pw \$env:FEDORA root@devenvrhel.ddns.net:/tmp/debian_dev_env.tar.gz /wslsources
+                
+                Get-ChildItem /wslsources
                 
                 cd /tmp
                 docker container rm debian_dev_env -f
@@ -145,7 +146,7 @@ pipeline {
                 
                 wsl --list
                 wsl --unregister debian_dev_env
-                wsl --import debian_dev_env ./debian_dev_env /tmp/debian_dev_env.tar.gz
+                wsl --import debian_dev_env /wslsources/debian_dev_env /wslsources/debian_dev_env.tar.gz
 
                 wsl --set-default debian_dev_env
                 wsl --list
