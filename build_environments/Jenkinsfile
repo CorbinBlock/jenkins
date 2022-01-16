@@ -138,7 +138,7 @@ pipeline {
                 
                 Get-ChildItem /wslsources
                 
-                cd /tmp
+                cd /wslsources
                 docker container rm debian_dev_env -f
                 docker builder prune -a -f
                 docker system prune --all --force --volumes
