@@ -1,15 +1,96 @@
 pipeline {
     agent none
     stages {
+         stage('update_fedora_server') {
+            agent {
+                label 'linux-01-fedora'
+            }
+            steps {
+                sh"""
+                dnf update -y
+                yum update -y
+
+                # systemctl enable --now cockpit.socket
+
+                # dnf install git -y
+                
+                # echo "export GIT_EMAIL='williamcorbinblock@gmail.com'" > /etc/profile.d/git_email.sh
+                # echo "export GIT_USERNAME='CorbinBlock'" > /etc/profile.d/git_username.sh
+
+                # git config --global user.name \$GIT_USERNAME
+                # git config --global user.name
+                # git config --global user.email \$GIT_EMAIL
+                # git config --global user.email
+
+                # dnf install vim -y
+                # dnf remove buildah skopeo podman containers-common atomic-registries docker container-tools -y
+                # rm -rf /etc/containers/* /var/lib/containers/* /etc/docker /etc/subuid* /etc/subgid*
+                # cd ~ && rm -rf /.local/share/containers/
+
+                # dnf remove podman.x86_64 -y
+                # dnf autoremove -y
+
+                # dnf -y install dnf-plugins-core -y
+
+                # dnf config-manager --add-repo=https://download.docker.com/linux/fedora/docker-ce.repo
+                # dnf repolist -v
+                # dnf install docker-ce docker-ce-cli containerd.io -y
+                # systemctl enable --now docker
+                # systemctl is-active docker
+
+                # curl -L "https://github.com/docker/compose/releases/download/1.23.2/docker-compose-\$(uname -s)-\$(uname -m)" -o docker-compose
+                # mv docker-compose /usr/local/bin && chmod +x /usr/local/bin/docker-compose
+                # ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
+
+                # dnf group install "Development Tools" -y
+
+                # dnf history userinstalled
+
+                mkdir -p /git
+                cd /git
+
+                git clone https://github.com/CorbinBlock/bash.git || (cd /git/bash ; git pull --no-rebase)
+                git clone https://github.com/CorbinBlock/docker.git || (cd /git/docker ; git pull --no-rebase)
+                git clone https://github.com/CorbinBlock/jenkins.git || (cd /git/jenkins ; git pull --no-rebase)
+                git clone https://github.com/CorbinBlock/python.git || (cd /git/python ; git pull --no-rebase)
+                
+                
+                # cd /git/docker/jenkins_container
+                # sh create_network.sh
+                # docker network inspect jenkins >/dev/null 2>&1 ||
+                # docker network create jenkins
+                # sh build_container.sh
+                # sh run_container.sh
+                # docker container ls --no-trunc | grep jenkins
+                # sh print_jenkins_admin_password.sh 182dd2d18aa8d4ab75d6d3bb816b9903a2e6e50afbe378fded3bd86371d1d5be
+                # 66115924e9944f23b7b754c79b6d7cdf
+                
+                # ssh-keygen -f ~/.ssh/jenkins_agent_key
+                # useradd -d /var/lib/jenkins jenkins
+                
+                docker container rm debian_dev_env -f
+                docker builder prune -a -f
+                docker system prune --all --force --volumes
+                cd /git/docker/debian_dev_env
+                docker build -t debian_dev_env . --no-cache=true
+                docker run -d -p 5000:5000 -t --name debian_dev_env debian_dev_env
+                docker save debian_dev_env | gzip > /tmp/debian_dev_env.tar.gz
+                
+                # cd /tmp
+                # aws s3 cp debian_dev_env.tar.gz s3://s3-bucket-cblock
+                
+                """
+            }
+        }
         stage('build_home_laptop') {
-            agent { 
+            agent {
                 label 'windows-01-home'
             }
             steps {
                 pwsh("""
                 # dbeaver - must install manually to accept prompt
                 # winget install 9PNKDR50694P -h #dbeaver
-                
+
                 # winget install AdoptOpenJDK.OpenJDK.11 -h
                 # winget install Apple.iTunes -h
                 # winget install Adobe.Acrobat.Reader.64-bit -h
@@ -30,44 +111,50 @@ pipeline {
                 # winget install Valve.Steam -h
                 # winget install WinDirStat -h
 
-                Get-NetIPAddress | Format-Table
+                # Get-NetIPAddress | Format-Table
 
                 # Install-Module -Force Microsoft.PowerShell.SecretManagement
                 # Install-Module -Force Microsoft.PowerShell.SecretStore
                 # Install-Module -Force -Name SecretManagement.KeePass -RequiredVersion 0.9.2
-            
+
                 New-Item -ItemType Directory -Force -Path /git/docker
                 New-Item -ItemType Directory -Force -Path /git/powershell
                 New-Item -ItemType Directory -Force -Path /git/python
-                
+
                 cd /git
-                
+
                 git clone https://github.com/CorbinBlock/docker
                 git clone https://github.com/CorbinBlock/powershell
                 git clone https://github.com/CorbinBlock/python
-    
+
                 bash -c "cd docker; git init; git pull --no-rebase; cd .."
                 bash -c "cd powershell; git init; git pull --no-rebase; cd .."
                 bash -c "cd python; git init; git pull --no-rebase; cd .."
                 
-                Set-Location /git/powershell_internal/util_powershell
-                ./pscp_copy_image_from_linux.ps1 
-                # docker container rm debian_dev_env -f
-                # docker builder prune -a -f
-                # cd docker/debian_dev_env
-                # ./build_debian_container.ps1; ./run_container.ps1
-                # docker start debian_dev_env
-                # ./export_docker_import_wsl.ps1
-                # docker volume prune -f
-                # docker volume ls
-                # docker container ls
-                # docker images ls
+                cd /git/powershell_internal/util_powershell
+                
+                pscp.exe -pw \$env:FEDORA root@devenvrhel.ddns.net:/tmp/debian_dev_env.tar.gz /tmp/
+                pscp.exe -pw \$env:DEBIAN -P 2222 /tmp/debian_dev_env.tar.gz root@devenvrhel.ddns.net:/tmp/
+                
+                cd /tmp
+                docker container rm debian_dev_env -f
+                docker builder prune -a -f
+                docker system prune --all --force --volumes
+                docker load --input debian_dev_env.tar.gz
+                docker run -d -p 5000:5000 -t --name debian_dev_env debian_dev_env
+                
+                wsl --list
+                wsl --unregister debian_dev_env
+                wsl --import debian_dev_env ./debian_dev_env /wslsources/debian_dev_env.tar.gz
+                wsl --set-default debian_dev_env
+                wsl --list
+                
 
                 """)
             }
         }
         stage('update_debian_server') {
-            agent { 
+            agent {
                 label 'linux-02-debian'
             }
             steps {
@@ -82,12 +169,12 @@ pipeline {
                 # passwd cblock
                 # mkdir /jenkins
                 # chown -R cblock /jenkins
-                
-                
-                
+
+
+
                 # sudo echo 'export GIT_USERNAME=<username>' >> /etc/profile.d/git_username.sh
                 # sudo echo 'export GIT_EMAIL=<email>' >> /etc/profile.d/git_email.sh
-                
+
                 # sudo apt-get update && sudo apt-get upgrade -y
                 # sudo apt-get install git -y
                 # git --version
@@ -111,13 +198,13 @@ pipeline {
                 # sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-\$(uname -s)-\$(uname -m)" -o /usr/local/bin/docker-compose
                 # sudo chmod +x /usr/local/bin/docker-compose
                 # docker-compose --version
-                
+
                 # vim /etc/ssh/sshd_config
                 # Edit line to the following: PermitRootLogin yes
-                
+
                 # Restart SSH server
-                # /etc/init.d/ssh restart 
-                
+                # /etc/init.d/ssh restart
+
                 mkdir -p /git
                 cd /git
 
@@ -125,74 +212,14 @@ pipeline {
                 git clone https://github.com/CorbinBlock/docker.git || (cd /git/docker ; git pull --no-rebase)
                 git clone https://github.com/CorbinBlock/jenkins.git || (cd /git/jenkins ; git pull --no-rebase)
                 git clone https://github.com/CorbinBlock/python.git || (cd /git/python ; git pull --no-rebase)
-              
                 
-                """
-            }
-        }
-         stage('update_fedora_server') {
-            agent { 
-                label 'linux-01-fedora'
-            }
-            steps {
-                sh"""
-                cat /etc/os-release
-                cd ~
-                pwd
-                ls
-                id
-                dnf update -y
-                yum update -y
-            
-                # systemctl enable --now cockpit.socket
-
-                # dnf install git -y
-                git --version
-                python --version 
+                cd /tmp
+                # docker container rm debian_dev_env -f
+                # docker volume prune -f
+                # docker builder prune -a -f
+                # docker load --input debian_dev_env.tar.gz
+                # docker run -d -p 5000:5000 -t --name debian_dev_env debian_dev_env
                 
-                # echo "export GIT_EMAIL='williamcorbinblock@gmail.com'" > /etc/profile.d/git_email.sh
-                # echo "export GIT_USERNAME='CorbinBlock'" > /etc/profile.d/git_username.sh
-
-                # git config --global user.name \$GIT_USERNAME
-                # git config --global user.name
-                # git config --global user.email \$GIT_EMAIL
-                # git config --global user.email
-
-                # dnf install vim -y
-                vim --version    
-                # dnf remove buildah skopeo podman containers-common atomic-registries docker container-tools -y
-                # rm -rf /etc/containers/* /var/lib/containers/* /etc/docker /etc/subuid* /etc/subgid*
-                # cd ~ && rm -rf /.local/share/containers/
-
-                # dnf remove podman.x86_64 -y
-                # dnf autoremove -y
-                
-                # dnf -y install dnf-plugins-core -y
-
-                # dnf config-manager --add-repo=https://download.docker.com/linux/fedora/docker-ce.repo
-                # dnf repolist -v
-                # dnf install docker-ce docker-ce-cli containerd.io -y 
-                # systemctl enable --now docker
-                # systemctl is-active docker
-
-                # curl -L "https://github.com/docker/compose/releases/download/1.23.2/docker-compose-\$(uname -s)-\$(uname -m)" -o docker-compose
-                # mv docker-compose /usr/local/bin && chmod +x /usr/local/bin/docker-compose
-                # ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
-
-                # dnf group install "Development Tools" -y
-                
-                dnf history userinstalled
-                
-                mkdir -p /git
-                cd /git
-               
-                git clone https://github.com/CorbinBlock/bash.git || (cd /git/bash ; git pull --no-rebase)
-                git clone https://github.com/CorbinBlock/docker.git || (cd /git/docker ; git pull --no-rebase)
-                git clone https://github.com/CorbinBlock/jenkins.git || (cd /git/jenkins ; git pull --no-rebase)
-                git clone https://github.com/CorbinBlock/python.git || (cd /git/python ; git pull --no-rebase)
-	         
-          #      dir( '/tmp') {
-          #      stash includes: 'debian_dev_env.tar.gz', name: 'debian_dev_env'}
 
 
                 """
