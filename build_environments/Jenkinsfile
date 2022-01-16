@@ -62,8 +62,7 @@ pipeline {
                 # sh build_container.sh
                 # sh run_container.sh
                 # docker container ls --no-trunc | grep jenkins
-                # sh print_jenkins_admin_password.sh 182dd2d18aa8d4ab75d6d3bb816b9903a2e6e50afbe378fded3bd86371d1d5be
-                # 66115924e9944f23b7b754c79b6d7cdf
+                # sh print_jenkins_admin_password.sh <instance_id>
                 
                 # ssh-keygen -f ~/.ssh/jenkins_agent_key
                 # useradd -d /var/lib/jenkins jenkins
@@ -150,9 +149,8 @@ pipeline {
                 wsl --list
                 wsl --unregister debian_dev_env
                 # wsl --import debian_dev_env /wslsources/debian_dev_env /wslsources/debian_dev_env.tar.gz
-
                 wsl --set-default Debian
-                
+                wsl --list               
 
                 """)
             }
