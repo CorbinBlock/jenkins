@@ -123,14 +123,10 @@ pipeline {
 
                 cd /git
 
-                git clone https://github.com/CorbinBlock/docker.git
-                git clone https://github.com/CorbinBlock/jenkins.git
-                git clone https://github.com/CorbinBlock/powershell.git
-                git clone https://github.com/CorbinBlock/python.git
-
-
-
-
+                git clone https://github.com/CorbinBlock/docker.git || (cd docker ; git pull --no-rebase)
+                git clone https://github.com/CorbinBlock/jenkins.git || (cd jenkins ; git pull --no-rebase)
+                git clone https://github.com/CorbinBlock/powershell.git || (cd powershell ; git pull --no-rebase)
+                git clone https://github.com/CorbinBlock/python.git || (cd python ; git pull --no-rebase)
                 
                 cd /git/powershell_internal/util_powershell
                 
@@ -158,13 +154,13 @@ pipeline {
 
 
 
-                bash -c "cd /git; git clone https://github.com/CorbinBlock/docker.git || (cd /git/docker ; git pull --no-rebase); cd .. "
+                bash -c "git clone https://github.com/CorbinBlock/docker.git || (cd /git/docker ; git pull --no-rebase); cd .. "
 
-                bash -c "cd /git; git clone https://github.com/CorbinBlock/jenkins.git || (cd /git/jenkins ; git pull --no-rebase); cd .. "
+                bash -c "git clone https://github.com/CorbinBlock/jenkins.git || (cd /git/jenkins ; git pull --no-rebase); cd .. "
 
-                bash -c "cd /git; git clone https://github.com/CorbinBlock/powershell.git || (cd /git/powershell ; git pull --no-rebase); cd .. "
+                bash -c "git clone https://github.com/CorbinBlock/powershell.git || (cd /git/powershell ; git pull --no-rebase); cd .. "
 
-                bash -c "cd /git; git clone https://github.com/CorbinBlock/python.git || (cd /git/python ; git pull --no-rebase); cd .. "
+                bash -c "git clone https://github.com/CorbinBlock/python.git || (cd /git/python ; git pull --no-rebase); cd .. "
                 """)
             }
         }
