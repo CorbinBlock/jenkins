@@ -128,9 +128,9 @@ pipeline {
                 git clone https://github.com/CorbinBlock/powershell.git
                 git clone https://github.com/CorbinBlock/python.git
 
-                # bash -c "cd docker; git init; git pull --no-rebase; cd .."
-                # bash -c "cd powershell; git init; git pull --no-rebase; cd .."
-                # bash -c "cd python; git init; git pull --no-rebase; cd .."
+
+
+
                 
                 cd /git/powershell_internal/util_powershell
                 
@@ -154,6 +154,10 @@ pipeline {
                 # wsl --import debian_dev_env /wslsources/debian_dev_env /wslsources/debian_dev_env.tar.gz
                 wsl --set-default Debian
                 wsl --list               
+
+                bash -c "cd /git/docker; git init; git pull --no-rebase; cd .."
+                bash -c "cd /git/powershell; git init; git pull --no-rebase; cd .."
+                bash -c "cd /git/python; git init; git pull --no-rebase; cd .."
 
                 """)
             }
