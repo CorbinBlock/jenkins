@@ -71,7 +71,7 @@ pipeline {
                 docker builder prune -a -f
                 docker system prune --all --force --volumes
                 cd /git/docker/debian_dev_env
-                docker build -t debian_dev_env . --no-cache=true
+                docker build -t debian_dev_env . # --no-cache=true
                 docker run -d -p 5000:5000 -t --name debian_dev_env debian_dev_env
                 docker save debian_dev_env | gzip > /tmp/debian_dev_env.tar.gz
                 
