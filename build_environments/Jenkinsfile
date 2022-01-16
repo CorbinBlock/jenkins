@@ -145,9 +145,12 @@ pipeline {
                 docker load --input debian_dev_env.tar.gz
                 docker run -d -p 5000:5000 -t --name debian_dev_env debian_dev_env
                 
+                # wsl --unregister Debian
+                # winget uninstall Debian.debian -h
                 # winget install Debian.debian -h
+
                 wsl --list
-                wsl --unregister debian_dev_env
+                # wsl --unregister debian_dev_env
                 # wsl --import debian_dev_env /wslsources/debian_dev_env /wslsources/debian_dev_env.tar.gz
                 wsl --set-default Debian
                 wsl --list               
