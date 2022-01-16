@@ -152,8 +152,9 @@ pipeline {
                 wsl --list               
 
 
-
-
+                cd /git
+                
+         
                 bash -c "git clone https://github.com/CorbinBlock/docker.git || (cd /git/docker ; git pull --no-rebase; cd -)"
 
                 bash -c "git clone https://github.com/CorbinBlock/jenkins.git || (cd /git/jenkins ; git pull --no-rebase); cd .. "
