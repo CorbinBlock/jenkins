@@ -48,6 +48,7 @@ pipeline {
 
                 mkdir -p /git
                 cd /git
+                ls -ltr
 
                 git clone https://github.com/CorbinBlock/bash.git || (cd /git/bash ; git pull --no-rebase)
                 git clone https://github.com/CorbinBlock/docker.git || (cd /git/docker ; git pull --no-rebase)
@@ -123,17 +124,18 @@ pipeline {
 
                 cd /git
 
-                git clone https://github.com/CorbinBlock/docker.git || (cd docker ; git pull --no-rebase)
-                git clone https://github.com/CorbinBlock/jenkins.git || (cd jenkins ; git pull --no-rebase)
-                git clone https://github.com/CorbinBlock/powershell.git || (cd powershell ; git pull --no-rebase)
-                git clone https://github.com/CorbinBlock/python.git || (cd python ; git pull --no-rebase)
+                git clone https://github.com/CorbinBlock/docker.git || (cd /git/docker && git pull --no-rebase)
+                git clone https://github.com/CorbinBlock/jenkins.git || (cd /git/jenkins && git pull --no-rebase)
+                git clone https://github.com/CorbinBlock/powershell.git || (cd /git/powershell && git pull --no-rebase)
+                git clone https://github.com/CorbinBlock/python.git || (cd /git/python && git pull --no-rebase)
                 
                 cd /git/powershell_internal/util_powershell
                 
                 pscp.exe -pw \$env:FEDORA root@devenvrhel.ddns.net:/tmp/debian_dev_env.tar.gz /wslsources
                 
                 Get-ChildItem /wslsources
-                
+            
+                # "/Program Files/Docker/Docker/Docker Desktop.exe"            
                 cd /wslsources
                 docker container rm debian_dev_env -f
                 docker builder prune -a -f
@@ -141,27 +143,28 @@ pipeline {
                 docker load --input debian_dev_env.tar.gz
                 docker run -d -p 5000:5000 -t --name debian_dev_env debian_dev_env
                 
-                # wsl --unregister Debian
-                # winget uninstall Debian.debian -h
-                # winget install Debian.debian -h
-
-                wsl --list
+                # dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
+                # dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
+                # Invoke-WebRequest -Uri "https://wslstorestorage.blob.core.windows.net/wslblob/wsl_update_x64.msi" -Outfile /tmp/wsl_update_x64.msi
+                # msiexec.exe /I /tmp/wsl_update_x64.msi /quiet 
+                # wsl --set-default-version 2
                 # wsl --unregister debian_dev_env
-                # wsl --import debian_dev_env /wslsources/debian_dev_env /wslsources/debian_dev_env.tar.gz
-                wsl --set-default Debian
-                wsl --list               
-
-
-                cd /git
+                # wsl --import debian_dev_env /wslsources/debian_dev_env /wslsources/debian-11-generic-amd64-daily.tar.xz
                 
-         
-                bash -c "git clone https://github.com/CorbinBlock/docker.git || (cd /git/docker ; git pull --no-rebase; cd -)"
+                wsl --list
+                # wsl --unregister Debian
+                # winget uninstall TheDebianProject.DebianGNULinux_76v4gfsz19hv4 -h
+                # winget install Debian.debian -h
+                # start-process debian
+                
+                # bash -c 'rm -f /etc/wsl.conf'
+                # bash -c 'echo "[user]" >> /etc/wsl.conf'
+                # bash -c 'echo "default=root" >> /etc/wsl.conf'
+                # wsl --shutdown
 
-                bash -c "git clone https://github.com/CorbinBlock/jenkins.git || (cd /git/jenkins ; git pull --no-rebase); cd .. "
-
-                bash -c "git clone https://github.com/CorbinBlock/powershell.git || (cd /git/powershell ; git pull --no-rebase); cd .. "
-
-                bash -c "git clone https://github.com/CorbinBlock/python.git || (cd /git/python ; git pull --no-rebase); cd .. "
+                # wsl --set-default Debian
+                # wsl --list
+                bash -c "apt-get update && apt-get upgrade -y; apt-get install vim git git-lfs python3 python3-pip python3-venv openjdk-11-jdk curl -y"
                 """)
             }
         }
@@ -239,3 +242,4 @@ pipeline {
         }
     }
 }
+
