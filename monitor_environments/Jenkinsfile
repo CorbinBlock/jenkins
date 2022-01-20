@@ -3,7 +3,7 @@ pipeline {
     stages {
         stage('check_batch') {
             agent { 
-                label 'windows-agent-02-work'
+                label 'windows-02-work'
             }
             steps {
                 pwsh("""
@@ -14,7 +14,7 @@ pipeline {
         }
         stage('check_data_dirs') {
             agent { 
-                label 'windows-agent-02-work'
+                label 'windows-02-work'
             }
             steps {
                 pwsh("""
@@ -26,7 +26,7 @@ pipeline {
         }
         stage('write_emails_to_disk') {
             agent { 
-                label 'windows-agent-02-work'
+                label 'windows-02-work'
             }
             steps {
                 pwsh"""
@@ -37,17 +37,6 @@ pipeline {
                 ./install_requirements.ps1
                 ./run_read_email.ps1
                 Get-Process java
-                """
-            }
-        }
-         stage('update_rhel_server') {
-            agent { 
-                label 'linux-agent-02-rhel'
-            }
-            steps {
-                sh"""
-             ls
-                
                 """
             }
         }
