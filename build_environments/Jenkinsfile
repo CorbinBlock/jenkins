@@ -7,8 +7,8 @@ pipeline {
             }
             steps {
                 sh"""
-                dnf update -y
-                yum update -y
+                # dnf update -y
+                # yum update -y
 
                 # systemctl enable --now cockpit.socket
 
@@ -68,13 +68,13 @@ pipeline {
                 # ssh-keygen -f ~/.ssh/jenkins_agent_key
                 # useradd -d /var/lib/jenkins jenkins
                 
-                docker container rm debian_dev_env -f
-                docker builder prune -a -f
-                docker system prune --all --force --volumes
-                cd /git/docker/debian_dev_env
-                docker build -t debian_dev_env . # --no-cache=true
-                docker run -d -p 5000:5000 -t --name debian_dev_env debian_dev_env
-                docker save debian_dev_env | gzip > /tmp/debian_dev_env.tar.gz
+                # docker container rm debian_dev_env -f
+                # docker builder prune -a -f
+                # docker system prune --all --force --volumes
+                # cd /git/docker/debian_dev_env
+                # docker build -t debian_dev_env . # --no-cache=true
+                # docker run -d -p 5000:5000 -t --name debian_dev_env debian_dev_env
+                # docker save debian_dev_env | gzip > /tmp/debian_dev_env.tar.gz
                 
                 # cd /tmp
                 # aws s3 cp debian_dev_env.tar.gz s3://s3-bucket-cblock
@@ -84,7 +84,7 @@ pipeline {
         }
         stage('build_home_laptop') {
             agent {
-                label 'windows-01-home'
+                label 'windows-01-asus'
             }
             steps {
                 pwsh("""
@@ -131,17 +131,17 @@ pipeline {
                 
                 cd /git/powershell_internal/util_powershell
                 
-                pscp.exe -pw \$env:FEDORA root@devenvrhel.ddns.net:/tmp/debian_dev_env.tar.gz /wslsources
+                # pscp.exe -pw \$env:FEDORA root@devenvrhel.ddns.net:/tmp/debian_dev_env.tar.gz /wslsources
                 
-                Get-ChildItem /wslsources
+                # Get-ChildItem /wslsources
             
                 # "/Program Files/Docker/Docker/Docker Desktop.exe"            
-                cd /wslsources
-                docker container rm debian_dev_env -f
-                docker builder prune -a -f
-                docker system prune --all --force --volumes
-                docker load --input debian_dev_env.tar.gz
-                docker run -d -p 5000:5000 -t --name debian_dev_env debian_dev_env
+                # cd /wslsources
+                # docker container rm debian_dev_env -f
+                # docker builder prune -a -f
+                # docker system prune --all --force --volumes
+                # docker load --input debian_dev_env.tar.gz
+                # docker run -d -p 5000:5000 -t --name debian_dev_env debian_dev_env
                 
                 # dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
                 # dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
