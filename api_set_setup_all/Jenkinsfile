@@ -7,7 +7,7 @@ stages {
             }
             steps {
                 sh"""
-                sudo su jenkins -c " . ~/.profile; api_set_setup_all"
+                sudo su cblock -c " . ~/.profile; api_set_setup_all"
                 """
             }
         }    
