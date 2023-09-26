@@ -1,0 +1,15 @@
+pipeline {
+    agent none
+stages {
+        stage('api_set_setup_all') {
+            agent { 
+                label 'HQDEBASUS01'
+            }
+            steps {
+                sh"""
+                sudo su jenkins -c " . ~/.profile; api_set_setup_all"
+                """
+            }
+        }    
+    }
+}
